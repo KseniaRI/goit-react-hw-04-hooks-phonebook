@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { PageTitle } from '../page-title/PageTitle';
 import { PhonebookForm } from '../phonebook-form/PhonebokForm';
@@ -10,7 +10,7 @@ import { Container } from './App.styled';
 
 export const App = () => {
 
-  const [contacts, setContacts] = useState([
+  const [contacts, setContacts] = useState(JSON.parse(localStorage.getItem('contacts')) ?? [
     { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
     { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
@@ -18,7 +18,11 @@ export const App = () => {
   ]);
 
   const [filter, setFilter] = useState('');
-  
+
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts])
+
   const formSubmitHandler = ({ name, number }, { resetForm }) => {
 
     const contactNames = contacts.map(contact => contact.name);
@@ -27,21 +31,18 @@ export const App = () => {
       alert(`${name} is already in contacts`);
     } else if (name !== '' && number !== '') {
       const newContact = { name, number, id: nanoid() };
-      setContacts([...contacts, newContact]);
+      setContacts(prevState => [...prevState, newContact]);
     }
     resetForm();
   }
   
-  const changeFilter = (evt) => {
-      setFilter(evt.target.value);
-  }
+  const changeFilter = (evt) => setFilter(evt.target.value);
+  
   const getVisibleContacts = () => {
     return contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()));
   }
-  const deleteContact = (evt) => {
-    setContacts(contacts.filter(contact => contact.id !== evt.target.id));
-  }
-
+  const deleteContact = (evt) => setContacts(contacts.filter(contact => contact.id !== evt.target.id));
+  
     const visibleContacts = getVisibleContacts();
     return (
     <Container>

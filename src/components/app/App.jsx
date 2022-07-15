@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { nanoid } from 'nanoid';
 import { PageTitle } from '../page-title/PageTitle';
 import { PhonebookForm } from '../phonebook-form/PhonebokForm';
@@ -16,7 +16,6 @@ export const App = () => {
     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
   ]);
-
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
@@ -24,12 +23,11 @@ export const App = () => {
   }, [contacts])
 
   const formSubmitHandler = ({ name, number }, { resetForm }) => {
-
     const contactNames = contacts.map(contact => contact.name);
 
     if (contactNames.includes(name)) {
       alert(`${name} is already in contacts`);
-    } else if (name !== '' && number !== '') {
+    } else {
       const newContact = { name, number, id: nanoid() };
       setContacts(prevState => [...prevState, newContact]);
     }
@@ -38,12 +36,12 @@ export const App = () => {
   
   const changeFilter = (evt) => setFilter(evt.target.value);
   
-  const getVisibleContacts = () => {
+  const visibleContacts = useMemo(() => {
     return contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()));
-  }
+  }, [filter, contacts]);
+
   const deleteContact = (evt) => setContacts(contacts.filter(contact => contact.id !== evt.target.id));
   
-    const visibleContacts = getVisibleContacts();
     return (
     <Container>
       <PageTitle title="Phonebook" />

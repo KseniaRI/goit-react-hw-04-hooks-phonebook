@@ -1,7 +1,8 @@
-import { Formik, Field, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { nanoid } from 'nanoid';
-import { StyledField, StyledForm, Label, Button} from './PhonebookForm.styled';
+import { StyledForm, Button } from './PhonebookForm.styled';
+import { TextInput } from './TextInput';
 
 const idName = nanoid();
 const idNumber = nanoid();
@@ -21,13 +22,9 @@ export const PhonebookForm = ({ onSubmit }) => {
         } 
         onSubmit={onSubmit}
       >
-      <StyledForm autoComplete="off" >
-        <Label htmlFor={idName}>Name</Label>         
-        <Field type="text" name="name" id={idName} placeholder="Jack Black" as={StyledField} />
-        <ErrorMessage name="name" />       
-        <Label htmlFor={idNumber}>Number</Label>
-        <Field type="tel" name="number" id={idNumber} placeholder="123-45-67" as={StyledField}/>         
-        <ErrorMessage name="number" />
+        <StyledForm autoComplete="off" >
+          <TextInput label="Name" name="name" type="text" id={idName} placeholder="Jack Black" />
+          <TextInput label="Number" name="number" type="tel" id={idNumber} placeholder="123-45-67" />
         <Button type="submit">Add contact</Button>
       </StyledForm>   
     </Formik>

@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import { Form } from 'formik';
 
 export const StyledField = styled.input`
-
 width: 300px;
 height: 32px;
 
@@ -50,3 +49,8 @@ font-weight: 500;
     color: #fff;
 }
 `;
+
+export const ErrorMessage = styled.div`
+color: red;
+font-style: italic;
+`
